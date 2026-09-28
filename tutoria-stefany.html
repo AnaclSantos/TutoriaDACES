@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tutoria PTA · Ana e Stefany · 2026.2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF2F0; --paper:#FFFFFF; --ink:#1F2E2B; --muted:#5B6B67; --line:#D5DEDA;
+  --teal:#2F6B5E; --teal-soft:#D6E8E2; --peri:#6A7FAA; --peri-soft:#DFE5F2;
+  --amber:#B8892C; --amber-soft:#F3E8CC; --class:#E3E7E6; --class-ink:#4A5552;
+  --work:#C9D2CF;
+  --head:"Lexend", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141C1A; --paper:#1C2624; --ink:#E4ECE9; --muted:#9CAEA9; --line:#2F3D3A;
+    --teal:#6FBFA9; --teal-soft:#1F3B34; --peri:#9DB0DB; --peri-soft:#27304A;
+    --amber:#E0B75A; --amber-soft:#3A3120; --class:#26312F; --class-ink:#AEBDB9; --work:#33403D;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141C1A; --paper:#1C2624; --ink:#E4ECE9; --muted:#9CAEA9; --line:#2F3D3A;
+  --teal:#6FBFA9; --teal-soft:#1F3B34; --peri:#9DB0DB; --peri-soft:#27304A;
+  --amber:#E0B75A; --amber-soft:#3A3120; --class:#26312F; --class-ink:#AEBDB9; --work:#33403D;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
+.wrap{max-width:980px;margin:0 auto;padding:28px 20px 60px}
+h1,h2,h3{font-family:var(--head);line-height:1.2;margin:0}
+h1{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:700;letter-spacing:-.01em}
+h2{font-size:1.35rem;font-weight:600;margin:0 0 12px}
+h3{font-size:1.05rem;font-weight:600;margin:0 0 6px}
+p{margin:0 0 12px}
+.lead{color:var(--muted);max-width:62ch;margin-top:8px}
+.hours{display:flex;gap:18px;flex-wrap:wrap;margin:18px 0 22px}
+.hours div{font-family:var(--head)}
+.hours b{font-size:1.8rem;color:var(--teal);display:block;line-height:1}
+.hours span{font-size:.9rem;color:var(--muted)}
+nav{display:flex;gap:6px;border-bottom:2px solid var(--line);margin-bottom:24px;overflow-x:auto}
+nav button{font:600 1rem var(--head);background:none;border:0;color:var(--muted);padding:10px 14px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap}
+nav button[aria-selected="true"]{color:var(--ink);border-color:var(--teal)}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--peri);outline-offset:2px}
+section[hidden]{display:none}
+
+/* grade */
+.legend{display:flex;flex-wrap:wrap;gap:10px 18px;font-size:.9rem;margin-bottom:12px}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:6px}
+.toggle{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:14px}
+.toggle button{font:600 .9rem var(--head);border:0;background:var(--paper);color:var(--muted);padding:8px 12px;cursor:pointer}
+.toggle button[aria-pressed="true"]{background:var(--teal);color:var(--paper)}
+.gridbox{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px}
+.grid{display:grid;grid-template-columns:52px repeat(5,minmax(110px,1fr));grid-template-rows:28px repeat(29,20px);min-width:620px;position:relative}
+.dayh{font:600 .9rem var(--head);text-align:center;align-self:center}
+.hr{font-size:.72rem;color:var(--muted);transform:translateY(-7px)}
+.cellline{border-top:1px solid var(--line);grid-column:2/7}
+.blk{margin:1px 3px;border-radius:6px;padding:3px 6px;font-size:.76rem;line-height:1.2;overflow:hidden;z-index:1}
+.blk small{display:block;opacity:.85}
+.b-class{background:var(--class);color:var(--class-ink)}
+.b-work{background:repeating-linear-gradient(135deg,var(--work) 0 6px,transparent 6px 12px);color:var(--muted);border:1px solid var(--work)}
+.b-joint{background:var(--teal);color:var(--paper);font-weight:700}
+.b-solo{background:var(--peri-soft);color:var(--ink);border-left:4px solid var(--peri)}
+.b-daces{background:var(--amber-soft);color:var(--ink);border-left:4px solid var(--amber)}
+.b-free{background:var(--teal-soft);color:var(--teal);border:1px dashed var(--teal)}
+.note{background:var(--paper);border-left:4px solid var(--amber);padding:12px 16px;border-radius:6px;margin:16px 0;font-size:.95rem}
+
+/* lista de horas */
+.plan{list-style:none;padding:0;margin:18px 0 0}
+.plan li{display:grid;grid-template-columns:140px 1fr 56px;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.plan .when{font-family:var(--head);font-weight:600}
+.plan .h{text-align:right;color:var(--muted);font-family:var(--head)}
+.tag{display:inline-block;font-size:.75rem;padding:1px 8px;border-radius:99px;margin-left:6px;font-weight:700}
+.tag.j{background:var(--teal-soft);color:var(--teal)}
+.tag.s{background:var(--peri-soft);color:var(--peri)}
+.tag.d{background:var(--amber-soft);color:var(--amber)}
+@media (max-width:620px){.plan li{grid-template-columns:1fr 50px}.plan .when{grid-column:1/-1}}
+
+/* formulário */
+.q{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:14px}
+.q header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:8px}
+.q .ans{white-space:pre-wrap;background:var(--bg);border-radius:6px;padding:10px 12px;font-size:.95rem}
+.copy{font:600 .85rem var(--head);border:1px solid var(--teal);color:var(--teal);background:none;border-radius:6px;padding:6px 10px;cursor:pointer;white-space:nowrap}
+.copy.done{background:var(--teal);color:var(--paper)}
+
+/* encontros */
+.meet{background:var(--paper);border:1px solid var(--line);border-radius:12px;margin-bottom:16px}
+.meet>summary{list-style:none;cursor:pointer;padding:16px 18px;display:flex;justify-content:space-between;gap:12px;align-items:center}
+.meet>summary::-webkit-details-marker{display:none}
+.meet>summary::after{content:"+";font:700 1.3rem var(--head);color:var(--teal)}
+.meet[open]>summary::after{content:"–"}
+.meet .inner{padding:0 18px 18px}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0}
+.steps li{counter-increment:s;display:grid;grid-template-columns:30px 1fr;gap:8px;padding:10px 0;border-top:1px solid var(--line)}
+.steps li::before{content:counter(s);font:700 .95rem var(--head);color:var(--paper);background:var(--teal);width:26px;height:26px;border-radius:50%;display:grid;place-items:center}
+.steps .t{font-weight:700}
+.steps .min{color:var(--muted);font-size:.85rem;font-weight:400}
+.steps .ask{color:var(--muted);font-size:.93rem;margin-top:4px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:700px){.two{grid-template-columns:1fr}}
+.box{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin-bottom:6px}
+.box.no{border-top:4px solid #B5524B}
+.box.yes{border-top:4px solid var(--teal)}
+
+/* registro */
+form.reg{display:grid;gap:10px}
+label{font-weight:700;font-size:.92rem}
+input,textarea,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px;width:100%}
+textarea{min-height:70px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{font:600 .95rem var(--head);background:var(--teal);color:var(--paper);border:0;border-radius:8px;padding:10px 16px;cursor:pointer}
+.btn.ghost{background:none;color:var(--teal);border:1px solid var(--teal)}
+.log{margin-top:16px}
+.entry{border-top:1px solid var(--line);padding:12px 0}
+.entry .d{font-family:var(--head);font-weight:600}
+.entry p{margin:4px 0;font-size:.93rem;white-space:pre-wrap}
+.entry .x{background:none;border:0;color:var(--muted);cursor:pointer;font-size:.85rem;text-decoration:underline}
+.empty{color:var(--muted);font-style:italic}
+table.cal{width:100%;border-collapse:collapse;font-size:.93rem}
+table.cal td,table.cal th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left}
+table.cal th{font-family:var(--head);font-weight:600;color:var(--muted)}
+.soon{color:#B5524B;font-weight:700}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Tutoria para Acessibilidade — Ana Clara e Stefany</h1>
+  <p class="lead">Programa de Tutoria para Acessibilidade (PTA), Daces/UnB, semestre 2026.2. Início previsto em 01/10/2026. Aqui ficam o cronograma, as respostas do plano de trabalho e o roteiro dos encontros.</p>
+  <div class="hours">
+    <div><b>12h</b><span>por semana, presenciais</span></div>
+    <div><b>6h</b><span>com a Stefany</span></div>
+    <div><b>6h</b><span>de mediação e registro</span></div>
+  </div>
+
+  <nav role="tablist">
+    <button role="tab" aria-selected="true" data-tab="semana">Semana</button>
+    <button role="tab" aria-selected="false" data-tab="form">Plano de trabalho</button>
+    <button role="tab" aria-selected="false" data-tab="encontros">Encontros</button>
+    <button role="tab" aria-selected="false" data-tab="registro">Registro e provas</button>
+  </nav>
+
+  <!-- SEMANA -->
+  <section id="semana">
+    <div class="toggle" role="group" aria-label="Qual agenda mostrar">
+      <button aria-pressed="true" data-view="ana">Minha semana</button>
+      <button aria-pressed="false" data-view="stef">Semana da Stefany</button>
+    </div>
+    <div class="legend" id="legend"></div>
+    <div class="gridbox"><div class="grid" id="grid"></div></div>
+
+    <div class="note">Os blocos das 17h30 contam com 30 minutos para você sair do estágio e chegar ao campus. Se o estágio for longe, avise a Daces e ajuste esses horários antes de enviar o plano. Nesses blocos você trabalha sozinha, porque a Stefany é do diurno e não precisa ficar no campus à noite.</div>
+
+    <h2 style="margin-top:28px">Distribuição das 12 horas</h2>
+    <ul class="plan">
+      <li><span class="when">Segunda 17h30–20h</span><span>Estudo das normativas de acessibilidade, planejamento das ações da semana e organização dos registros.<span class="tag s">sozinha</span></span><span class="h">2h30</span></li>
+      <li><span class="when">Terça 10h–12h</span><span>Reunião presencial semanal (dia fixo): rotina de estudos, calendário de provas, demandas de acessibilidade.<span class="tag j">com ela</span></span><span class="h">2h</span></li>
+      <li><span class="when">Terça 17h30–19h30</span><span>Mediação: e-mails e conversas com professores(as), coordenação e Daces; pedidos de adequação e de materiais acessíveis.<span class="tag s">sozinha</span></span><span class="h">2h</span></li>
+      <li><span class="when">Quinta 10h–12h</span><span>Formações da Daces. Nas semanas sem formação, reuniões de mediação com professores(as) e coordenação, com a Stefany quando fizer sentido.<span class="tag d">Daces</span></span><span class="h">2h</span></li>
+      <li><span class="when">Sexta 10h–12h</span><span>Segundo encontro: fechamento da semana, ferramentas de organização e preparação logística para as provas.<span class="tag j">com ela</span></span><span class="h">2h</span></li>
+      <li><span class="when">Sexta 17h30–19h</span><span>Registro dos encontros e formulários mensais de acompanhamento.<span class="tag s">sozinha</span></span><span class="h">1h30</span></li>
+    </ul>
+  </section>
+
+  <!-- FORMULÁRIO -->
+  <section id="form" hidden>
+    <p class="lead" style="margin-bottom:18px">Respostas prontas para colar no Microsoft Forms. Revise o texto das questões 6 e 8 com a Stefany antes de enviar: ele precisa refletir o que ela disse e o que ela concorda em compartilhar.</p>
+    <div id="qs"></div>
+  </section>
+
+  <!-- ENCONTROS -->
+  <section id="encontros" hidden>
+    <div class="two" style="margin-bottom:20px">
+      <div class="box yes">
+        <h3>O que é seu papel</h3>
+        <ul>
+          <li>Organizar a rotina e o calendário com ela.</li>
+          <li>Mediar com professores(as), coordenação e Daces.</li>
+          <li>Encaminhar para a monitoria quando o problema for a matéria.</li>
+          <li>Apresentar ferramentas de organização até ela usar sozinha.</li>
+        </ul>
+      </div>
+      <div class="box no">
+        <h3>O que não é</h3>
+        <ul>
+          <li>Explicar conteúdo, resolver ou corrigir exercícios.</li>
+          <li>Acompanhar a Stefany dentro das aulas.</li>
+          <li>Aplicar provas.</li>
+          <li>Decidir por ela: as escolhas sobre o que pedir e o que compartilhar são dela.</li>
+        </ul>
+      </div>
+    </div>
+
+    <details class="meet" open>
+      <summary><div><h3>Terça, 10h–12h · reunião semanal</h3><span style="color:var(--muted);font-size:.93rem">Planejar a semana que começa</span></div></summary>
+      <div class="inner">
+        <ol class="steps">
+          <li><div><div class="t">Chegada <span class="min">· 10 min</span></div><div class="ask">"Como foi a semana? Teve algo que pesou mais?" Deixe ela falar primeiro; não precisa entrar em conteúdo.</div></div></li>
+          <li><div><div class="t">Olhar para trás <span class="min">· 15 min</span></div><div class="ask">Repassem o plano de estudos da semana anterior. "O que você conseguiu cumprir? Em que horário foi mais fácil estudar?" Ajuste o plano ao que funcionou, sem cobrança.</div></div></li>
+          <li><div><div class="t">Próximos 14 dias <span class="min">· 15 min</span></div><div class="ask">Abram a aba "Registro e provas" e atualizem provas, listas e entregas. Confira os avisos no SIGAA e no Aprender3 de cada disciplina.</div></div></li>
+          <li><div><div class="t">Montar a semana <span class="min">· 35 min</span></div><div class="ask">Distribuam blocos curtos de estudo (por exemplo, 40 min + pausa) nas janelas livres dela: terça à tarde, quinta e sexta de manhã. Encaixem a monitoria de Cálculo 1 e Física 1. Ela escolhe os horários; você ajuda a colocar na agenda com lembrete.</div></div></li>
+          <li><div><div class="t">Acessibilidade <span class="min">· 25 min</span></div><div class="ask">"Teve alguma prova, aula ou atividade em que o formato atrapalhou?" Se sim, combinem o que levar para o(a) professor(a) ou para a Daces e quem fala o quê. Você faz a mediação na terça à noite.</div></div></li>
+          <li><div><div class="t">Combinados <span class="min">· 10 min</span></div><div class="ask">Leiam juntas o que ficou decidido e registrem na aba "Registro e provas".</div></div></li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="meet">
+      <summary><div><h3>Sexta, 10h–12h · segundo encontro</h3><span style="color:var(--muted);font-size:.93rem">Fechar a semana e preparar a próxima</span></div></summary>
+      <div class="inner">
+        <ol class="steps">
+          <li><div><div class="t">Como foi a semana <span class="min">· 15 min</span></div><div class="ask">Conferir os blocos de estudo planejados na terça. Ela foi à monitoria? O que atrapalhou?</div></div></li>
+          <li><div><div class="t">Ferramentas <span class="min">· 30 min</span></div><div class="ask">Uma ferramenta por vez: agenda com lembretes, timer de pomodoro, lista de tarefas, quadro de pendências. Ela testa e diz se serve; se não servir, troquem.</div></div></li>
+          <li><div><div class="t">Logística das provas <span class="min">· 30 min</span></div><div class="ask">Para cada prova das próximas duas semanas: data, sala, horário, o que é permitido levar, se a adequação pedida à Daces já foi confirmada pelo(a) professor(a). Nada de revisar matéria aqui.</div></div></li>
+          <li><div><div class="t">Retorno das mediações <span class="min">· 20 min</span></div><div class="ask">Conte a ela o que professores(as) e Daces responderam. Decidam juntas o próximo passo.</div></div></li>
+          <li><div><div class="t">Fechamento <span class="min">· 10 min</span></div><div class="ask">"O que você quer tentar diferente semana que vem?" Registrar.</div></div></li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="meet">
+      <summary><div><h3>Primeiros encontros · outubro</h3><span style="color:var(--muted);font-size:.93rem">Coisas para resolver logo no começo</span></div></summary>
+      <div class="inner">
+        <ol class="steps">
+          <li><div><div class="t">Revisar o plano de trabalho com ela</div><div class="ask">Ler juntas as respostas das questões 6, 8 e 9 antes de enviar. Perguntar se ela se sente bem com o que está escrito.</div></div></li>
+          <li><div><div class="t">Prova de Física 1</div><div class="ask">Conversar sobre como foi a prova e se ela quer acionar a Daces e o professor para pedir adequações nas próximas avaliações.</div></div></li>
+          <li><div><div class="t">Mapa do semestre</div><div class="ask">Levantar os planos de ensino das 5 disciplinas e anotar todas as datas de prova e entrega já conhecidas.</div></div></li>
+          <li><div><div class="t">Monitoria</div><div class="ask">Descobrir juntas os horários e locais da monitoria de Cálculo 1 e Física 1.</div></div></li>
+          <li><div><div class="t">Como ela prefere ser apoiada</div><div class="ask">Canal de contato (mensagem, e-mail), o que ela quer que você fale com professores e o que prefere falar ela mesma.</div></div></li>
+        </ol>
+      </div>
+    </details>
+  </section>
+
+  <!-- REGISTRO -->
+  <section id="registro" hidden>
+    <div class="two">
+      <div class="box">
+        <h2>Registrar encontro</h2>
+        <form class="reg" id="regForm">
+          <div class="row">
+            <div><label for="rData">Data</label><input type="date" id="rData" required></div>
+            <div><label for="rTipo">Tipo</label>
+              <select id="rTipo"><option>Reunião de terça</option><option>Encontro de sexta</option><option>Formação Daces</option><option>Mediação</option><option>Outro</option></select></div>
+          </div>
+          <div><label for="rConv">O que conversamos</label><textarea id="rConv"></textarea></div>
+          <div><label for="rComb">Combinados e próximos passos</label><textarea id="rComb"></textarea></div>
+          <div><button class="btn" type="submit">Salvar registro</button></div>
+        </form>
+      </div>
+      <div class="box">
+        <h2>Provas e entregas</h2>
+        <form class="reg" id="calForm">
+          <div class="row">
+            <div><label for="cData">Data</label><input type="date" id="cData" required></div>
+            <div><label for="cDisc">Disciplina</label>
+              <select id="cDisc"><option>Cálculo 1</option><option>Física 1</option><option>Algoritmos e Prog.</option><option>Ciências do Ambiente</option><option>Intro. Eng. Elétrica</option></select></div>
+          </div>
+          <div><label for="cDesc">O quê</label><input id="cDesc" placeholder="Prova 2, lista 3, relatório..." required></div>
+          <div><button class="btn" type="submit">Adicionar</button></div>
+        </form>
+        <div id="cal" class="log"></div>
+      </div>
+    </div>
+    <div class="box" style="margin-top:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <h2 style="margin:0">Encontros registrados</h2>
+        <button class="btn ghost" id="copyLog" type="button">Copiar tudo para o formulário mensal</button>
+      </div>
+      <div id="log" class="log"></div>
+    </div>
+    <p style="color:var(--muted);font-size:.85rem;margin-top:12px">Os registros ficam salvos só neste navegador. Copie para outro lugar antes do fim do mês.</p>
+  </section>
+</div>
+
+<script>
+// ---------- abas ----------
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('nav button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  document.querySelectorAll('section').forEach(s=>s.hidden=s.id!==b.dataset.tab);
+}));
+
+// ---------- grade ----------
+const days=['Seg','Ter','Qua','Qui','Sex'];
+const t=s=>{const[h,m]=s.split(':').map(Number);return h*60+m};
+const START=t('8:00');
+const ana=[
+ [0,'8:00','9:50','class','Intro. Sociologia'],[0,'10:00','11:50','class','Sistemas Digitais'],
+ [1,'8:00','9:50','class','Cálculo 3'],[1,'20:50','22:30','class','Cálculo 2'],
+ [2,'8:00','9:50','class','Intro. Sociologia'],[2,'10:00','11:50','class','Sistemas Digitais'],[2,'19:00','20:40','class','Equil. Químicos'],
+ [3,'8:00','9:50','class','Cálculo 3'],[3,'19:00','20:40','class','Cálculo 2'],
+ [4,'8:00','9:50','class','Cálculo 3'],[4,'19:00','20:40','class','Cálculo 2'],
+ ...[0,1,2,3,4].map(d=>[d,'12:00','17:00','work','Estágio']),
+ [0,'17:30','20:00','solo','Tutoria','planejamento'],
+ [1,'10:00','12:00','joint','Tutoria','reunião com ela'],
+ [1,'17:30','19:30','solo','Tutoria','mediação'],
+ [3,'10:00','12:00','daces','Tutoria','formação Daces'],
+ [4,'10:00','12:00','joint','Tutoria','encontro com ela'],
+ [4,'17:30','19:00','solo','Tutoria','registros'],
+];
+const stef=[
+ [0,'8:00','9:50','class','Física 1'],[0,'14:00','15:50','class','Cálculo 1'],[0,'16:00','17:50','class','Algoritmos'],
+ [1,'8:00','9:50','class','Ciências do Ambiente'],
+ [2,'8:00','9:50','class','Física 1'],[2,'14:00','15:50','class','Cálculo 1'],[2,'16:00','17:50','class','Intro. Eng. Elétrica'],
+ [3,'14:00','17:50','class','Algoritmos'],
+ [4,'14:00','15:50','class','Cálculo 1'],
+ [1,'10:00','12:00','joint','Tutoria','reunião com Ana'],
+ [3,'10:00','12:00','daces','Formação Daces','se houver'],
+ [4,'10:00','12:00','joint','Tutoria','encontro com Ana'],
+ [1,'14:00','18:00','free','Livre','bom para estudar'],
+ [3,'8:00','10:00','free','Livre','bom para estudar'],
+ [4,'8:00','10:00','free','Livre',''],
+];
+const legends={
+ ana:[['class','Aula'],['work','Estágio'],['joint','Tutoria com a Stefany'],['solo','Tutoria sozinha'],['daces','Formação Daces']],
+ stef:[['class','Aula'],['joint','Tutoria com a Ana'],['daces','Formação Daces'],['free','Janela livre para estudo']]
+};
+function render(view){
+  const g=document.getElementById('grid');g.innerHTML='';
+  g.insertAdjacentHTML('beforeend','<div></div>');
+  days.forEach((d,i)=>g.insertAdjacentHTML('beforeend',`<div class="dayh" style="grid-column:${i+2};grid-row:1">${d}</div>`));
+  for(let i=0;i<29;i++){
+    const mins=START+i*30;
+    if(i%2===0) g.insertAdjacentHTML('beforeend',`<div class="hr" style="grid-column:1;grid-row:${i+2}">${Math.floor(mins/60)}h</div>`);
+    if(i%2===0) g.insertAdjacentHTML('beforeend',`<div class="cellline" style="grid-row:${i+2}"></div>`);
+  }
+  const data=view==='ana'?ana:stef;
+  data.forEach(([d,a,b,k,n,s])=>{
+    const r1=Math.round((t(a)-START)/30)+2, r2=Math.round((t(b)-START)/30)+2;
+    g.insertAdjacentHTML('beforeend',`<div class="blk b-${k}" style="grid-column:${d+2};grid-row:${r1}/${r2}">${n}${s?`<small>${s}</small>`:''}<small>${a}–${b}</small></div>`);
+  });
+  document.getElementById('legend').innerHTML=legends[view].map(([k,l])=>`<span><i class="b-${k}"></i>${l}</span>`).join('');
+}
+document.querySelectorAll('.toggle button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.toggle button').forEach(x=>x.setAttribute('aria-pressed',x===b));render(b.dataset.view);
+}));
+render('ana');
+
+// ---------- formulário ----------
+const Q=[
+ ['5. Data da reunião presencial','28/09/2026'],
+ ['6. Relato detalhado do diálogo',`Durante a reunião, a tutorada relatou que está no primeiro semestre do curso e que sua principal preocupação é a disciplina de Cálculo 1. Relatou também que realizou a primeira prova de Física 1 e não conseguiu resolver as questões. Segundo ela, as maiores dificuldades nas duas disciplinas estão na interpretação dos enunciados e na organização de uma rotina de estudos. Conversamos sobre o papel da tutoria, que não inclui reforço de conteúdo, e sobre as formas de apoio possíveis: planejamento da rotina acadêmica, mapeamento das datas de avaliações e entregas, mediação com professores(as) e com a Daces para adequações nas avaliações, e encaminhamento para a monitoria das disciplinas. Também definimos os dias e horários dos encontros semanais a partir das grades horárias de ambas e da jornada de estágio da tutora.`],
+ ['7. Barreiras (marcar)',`☑ Barreiras nas comunicações e na informação
+☑ Barreiras atitudinais
+☑ Outro: Barreiras na organização da rotina acadêmica`],
+ ['8. Barreiras no semestre atual',`A tutorada, ingressante no primeiro semestre, enfrenta dificuldades na interpretação de enunciados nas disciplinas de Cálculo 1 e Física 1, o que comprometeu seu desempenho na primeira avaliação de Física 1, na qual não conseguiu resolver as questões propostas. Enfrenta ainda dificuldade para estabelecer e manter uma rotina de estudos, agravada pela adaptação à vida universitária. Os formatos atuais das avaliações e dos enunciados não contemplam adequações às suas necessidades.`],
+ ['9. Ações da tutora',`Planejamento conjunto de uma rotina semanal de estudos, respeitando a grade horária e o ritmo da tutorada, com revisão nas reuniões semanais; mapeamento das datas de provas e entregas de todas as disciplinas; mediação com os(as) professores(as) de Cálculo 1 e Física 1, em articulação com a Daces, para solicitar adequações nas avaliações (como tempo adicional, ambiente com menos estímulos e enunciados em linguagem mais clara ou fracionados); articulação com a coordenação do curso quando necessário; encaminhamento e apoio na organização da participação na monitoria das disciplinas; apresentação e apoio no uso de ferramentas de organização (agenda digital, lembretes, técnicas de gestão do tempo), buscando fortalecer sua autonomia.`],
+ ['10. Dia fixo das reuniões presenciais','Terça'],
+ ['11. Dias, horários e tipo de atividade',`Segunda - 17h30 às 20h: estudo das normativas de acessibilidade, planejamento das ações da semana e organização dos registros; Terça - 10h às 12h: reunião presencial semanal com a tutorada (planejamento da rotina de estudos e mapeamento de provas e entregas); Terça - 17h30 às 19h30: articulação com professores(as), coordenação do curso e Daces (comunicações, solicitação de adequações e de materiais acessíveis); Quinta - 10h às 12h: participação nas formações da Daces e, nas semanas sem formação, reuniões de mediação com professores(as) e coordenação; Sexta - 10h às 12h: segundo encontro presencial com a tutorada (revisão da semana, apoio no uso de ferramentas de organização e preparação para as avaliações); Sexta - 17h30 às 19h: elaboração dos formulários mensais de acompanhamento e registro dos encontros.`],
+ ['12. Dia preferido da tutorada para formações','Quinta (manhã totalmente livre)'],
+ ['13. Dia preferido da tutora para formações','Quinta (livre a partir das 10h; aula de 8h às 9h50)'],
+];
+const qs=document.getElementById('qs');
+Q.forEach(([h,a],i)=>{
+  qs.insertAdjacentHTML('beforeend',`<div class="q"><header><h3>${h}</h3><button class="copy" data-i="${i}">Copiar</button></header><div class="ans">${a.replace(/</g,'&lt;')}</div></div>`);
+});
+async function copyText(txt,btn,label){
+  try{await navigator.clipboard.writeText(txt)}catch(e){const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove()}
+  btn.classList.add('done');const o=btn.textContent;btn.textContent=label||'Copiado';setTimeout(()=>{btn.classList.remove('done');btn.textContent=o},1600);
+}
+qs.addEventListener('click',e=>{const b=e.target.closest('.copy');if(b)copyText(Q[b.dataset.i][1],b)});
+
+// ---------- registro ----------
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))||[]}catch(e){return[]}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const fmt=d=>d.split('-').reverse().join('/');
+function renderLog(){
+  const L=store.get('pta-log').sort((a,b)=>b.data.localeCompare(a.data));
+  const el=document.getElementById('log');
+  el.innerHTML=L.length?L.map((r,i)=>`<div class="entry"><div class="d">${fmt(r.data)} · ${r.tipo}</div>${r.conv?`<p><b>Conversamos:</b> ${esc(r.conv)}</p>`:''}${r.comb?`<p><b>Combinados:</b> ${esc(r.comb)}</p>`:''}<button class="x" data-id="${r.id}">Apagar</button></div>`).join(''):'<p class="empty">Nenhum encontro registrado ainda. Use o formulário acima ao fim de cada encontro.</p>';
+}
+function renderCal(){
+  const C=store.get('pta-cal').sort((a,b)=>a.data.localeCompare(b.data));
+  const today=new Date();today.setHours(0,0,0,0);
+  const el=document.getElementById('cal');
+  el.innerHTML=C.length?`<table class="cal"><tr><th>Data</th><th>Disciplina</th><th>O quê</th><th></th></tr>${C.map(c=>{const dd=(new Date(c.data+'T00:00')-today)/864e5;return`<tr><td class="${dd>=0&&dd<=14?'soon':''}">${fmt(c.data)}</td><td>${c.disc}</td><td>${esc(c.desc)}</td><td><button class="x" data-cid="${c.id}" style="background:none;border:0;color:var(--muted);cursor:pointer;text-decoration:underline">Apagar</button></td></tr>`}).join('')}</table><p style="font-size:.85rem;color:var(--muted);margin-top:8px">Datas em vermelho: nos próximos 14 dias.</p>`:'<p class="empty">Adicione as provas e entregas que aparecerem nos planos de ensino.</p>';
+}
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+document.getElementById('regForm').addEventListener('submit',e=>{
+  e.preventDefault();const L=store.get('pta-log');
+  L.push({id:Date.now(),data:rData.value,tipo:rTipo.value,conv:rConv.value.trim(),comb:rComb.value.trim()});
+  store.set('pta-log',L);e.target.reset();renderLog();
+});
+document.getElementById('calForm').addEventListener('submit',e=>{
+  e.preventDefault();const C=store.get('pta-cal');
+  C.push({id:Date.now(),data:cData.value,disc:cDisc.value,desc:cDesc.value.trim()});
+  store.set('pta-cal',C);e.target.reset();renderCal();
+});
+document.getElementById('log').addEventListener('click',e=>{const b=e.target.closest('[data-id]');if(!b)return;store.set('pta-log',store.get('pta-log').filter(r=>String(r.id)!==b.dataset.id));renderLog()});
+document.getElementById('cal').addEventListener('click',e=>{const b=e.target.closest('[data-cid]');if(!b)return;store.set('pta-cal',store.get('pta-cal').filter(r=>String(r.id)!==b.dataset.cid));renderCal()});
+document.getElementById('copyLog').addEventListener('click',e=>{
+  const L=store.get('pta-log').sort((a,b)=>a.data.localeCompare(b.data));
+  const txt=L.map(r=>`${fmt(r.data)} (${r.tipo})\nConversamos: ${r.conv||'-'}\nCombinados: ${r.comb||'-'}`).join('\n\n')||'Sem registros.';
+  copyText(txt,e.currentTarget,'Copiado');
+});
+renderLog();renderCal();
+</script>
+</body>
+</html>
