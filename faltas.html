@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Controle de faltas</title>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF2F0;--paper:#FFFFFF;--ink:#1F2E2B;--muted:#5B6B67;--line:#D5DEDA;
+  --ok:#2F6B5E;--ok-soft:#D6E8E2;--warn:#A9781C;--warn-soft:#F3E8CC;--bad:#B5524B;--bad-soft:#F4DEDB;
+  --head:"Lexend","Segoe UI",system-ui,sans-serif;--body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141C1A;--paper:#1C2624;--ink:#E4ECE9;--muted:#9CAEA9;--line:#2F3D3A;
+  --ok:#6FBFA9;--ok-soft:#1F3B34;--warn:#E0B75A;--warn-soft:#3A3120;--bad:#E58A82;--bad-soft:#3E2422;}}
+:root[data-theme="dark"]{--bg:#141C1A;--paper:#1C2624;--ink:#E4ECE9;--muted:#9CAEA9;--line:#2F3D3A;
+  --ok:#6FBFA9;--ok-soft:#1F3B34;--warn:#E0B75A;--warn-soft:#3A3120;--bad:#E58A82;--bad-soft:#3E2422;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 var(--body)}
+.wrap{max-width:760px;margin:0 auto;padding:24px 16px 48px}
+h1{font:700 clamp(1.5rem,5vw,2rem)/1.2 var(--head);margin:0}
+h2{font:600 1.1rem/1.25 var(--head);margin:0}
+.lead{color:var(--muted);margin:6px 0 20px}
+.rule{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.rule span{background:var(--paper);border:1px solid var(--line);border-radius:99px;padding:4px 12px;font-size:.88rem}
+.card{background:var(--paper);border:1px solid var(--line);border-left:6px solid var(--ok);border-radius:12px;padding:16px;margin-bottom:14px}
+.card.warn{border-left-color:var(--warn)}.card.bad{border-left-color:var(--bad)}
+.top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.meta{color:var(--muted);font-size:.88rem;margin-top:2px}
+.count{font:700 2rem/1 var(--head);text-align:right;white-space:nowrap}
+.count small{font-size:1rem;color:var(--muted);font-weight:400}
+.dots{display:flex;gap:6px;margin:14px 0 8px}
+.dots i{flex:1;height:10px;border-radius:99px;background:var(--line)}
+.dots i.on{background:var(--ok)}.warn .dots i.on{background:var(--warn)}.bad .dots i.on{background:var(--bad)}
+.status{font-weight:700;font-size:.95rem}
+.ok .status{color:var(--ok)}.warn .status{color:var(--warn)}.bad .status{color:var(--bad)}
+.add{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+input{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;flex:1;min-width:150px}
+button{font:600 .95rem var(--head);border-radius:8px;padding:9px 14px;cursor:pointer;border:1px solid var(--ok);background:var(--ok);color:var(--paper)}
+button.ghost{background:none;color:var(--muted);border-color:var(--line);font-weight:400;padding:4px 8px;font-size:.82rem}
+button:focus-visible,input:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+ul.dates{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-wrap:wrap;gap:6px}
+ul.dates li{background:var(--bg);border-radius:6px;padding:2px 4px 2px 10px;font-size:.88rem;display:flex;align-items:center;gap:4px}
+.tips{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:24px}
+.tips ul{margin:8px 0 0;padding-left:20px}.tips li{margin-bottom:6px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p style="margin:0 0 12px"><a href="index.html" style="color:var(--ok);font-family:var(--head);font-weight:600">← Voltar para a tutoria</a></p>
+  <h1>Controle de faltas — 2026.2</h1>
+  <p class="lead">Toque em "Registrar falta" sempre que faltar a uma aula. A cor muda quando você estiver perto do limite.</p>
+  <div class="rule"><span>30h: até 3 faltas</span><span>60h: até 4 faltas</span><span>90h: até 6 faltas</span></div>
+
+  <div id="list"></div>
+
+  <div class="tips">
+    <h2>Combinados</h2>
+    <ul>
+      <li>Cada dia de aula perdido conta como 1 falta aqui.</li>
+      <li>Laranja: só resta 1 falta. Antes de faltar de novo, fale com a tutora.</li>
+      <li>Vermelho: limite atingido. Não falte mais a essa disciplina.</li>
+      <li>Uma vez por mês, compare com a contagem do professor ou do SIGAA e corrija aqui.</li>
+      <li>Atestado médico: guarde e entregue ao professor ou à coordenação o quanto antes.</li>
+    </ul>
+  </div>
+  <p class="foot">Os dados ficam salvos só neste celular ou computador, neste navegador.</p>
+</div>
+<script>
+const DISC=[
+ {id:'cic0004',nome:'Algoritmos e Programação',cod:'CIC0004',ch:90,dias:'Seg 16h–17h50 · Qui 14h–17h50'},
+ {id:'mat0025',nome:'Cálculo 1',cod:'MAT0025',ch:90,dias:'Seg, Qua e Sex 14h–15h50'},
+ {id:'ecl0014',nome:'Ciências do Ambiente',cod:'ECL0014',ch:30,dias:'Ter 8h–9h50'},
+ {id:'ene0439',nome:'Introdução à Eng. Elétrica',cod:'ENE0439',ch:30,dias:'Qua 16h–17h50'},
+];
+const LIM={30:3,60:4,90:6};
+const KEY='faltas-2026-2';
+const load=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return{}}};
+const save=d=>{try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}};
+const fmt=s=>s?s.split('-').reverse().slice(0,2).join('/'):'sem data';
+const today=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
+function render(){
+  const data=load(),el=document.getElementById('list');el.innerHTML='';
+  DISC.forEach(d=>{
+    const f=(data[d.id]||[]).slice().sort(),lim=LIM[d.ch],rest=lim-f.length;
+    const cls=rest<=0?'bad':rest===1?'warn':'ok';
+    const msg=rest<0?`Passou do limite em ${-rest}. Procure a tutora e o professor.`:rest===0?'Limite atingido. Não pode mais faltar.':rest===1?'Atenção: resta só 1 falta.':`Pode faltar mais ${rest} vezes.`;
+    const card=document.createElement('div');card.className='card '+cls;
+    card.innerHTML=`<div class="top"><div><h2>${d.nome}</h2><div class="meta">${d.cod} · ${d.ch}h · ${d.dias}</div></div>
+      <div class="count">${f.length}<small> / ${lim}</small></div></div>
+      <div class="dots">${Array.from({length:lim},(_,i)=>`<i class="${i<f.length?'on':''}"></i>`).join('')}</div>
+      <div class="status">${msg}</div>
+      <div class="add"><input type="date" value="${today()}" aria-label="Data da falta"><button>Registrar falta</button></div>
+      ${f.length?`<ul class="dates">${f.map((x,i)=>`<li>${fmt(x)}<button class="ghost" data-i="${i}" aria-label="Apagar falta de ${fmt(x)}">✕</button></li>`).join('')}</ul>`:''}`;
+    card.querySelector('.add button').onclick=()=>{
+      const v=card.querySelector('input').value;const D=load();(D[d.id]=D[d.id]||[]).push(v||'');save(D);render();
+    };
+    card.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{
+      const D=load();const arr=(D[d.id]||[]).slice().sort();arr.splice(+b.dataset.i,1);D[d.id]=arr;save(D);render();
+    });
+    el.appendChild(card);
+  });
+}
+render();
+</script>
+</body>
+</html>
